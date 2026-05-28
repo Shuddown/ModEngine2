@@ -33,7 +33,6 @@ install(DIRECTORY
         COMPONENT sdk)
 
 install(FILES
-        "${CMAKE_CURRENT_SOURCE_DIR}/third-party/MINT/MINT.h"
         "${VCPKG_INCLUDE_DIR}/lauxlib.h"
         "${VCPKG_INCLUDE_DIR}/lua.h"
         "${VCPKG_INCLUDE_DIR}/lua.hpp"

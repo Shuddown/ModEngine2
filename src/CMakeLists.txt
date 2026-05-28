@@ -86,7 +86,6 @@ target_include_directories(modengine2 PRIVATE
         "../third-party/kiero"
         "../third-party/imgui"
         "../third-party/imgui/backends"
-        "../third-party/MINT"
         "../third-party/ImTerm/include"
         "../third-party/sol2_ImGui_Bindings")
 
@@ -97,7 +96,6 @@ target_link_libraries(modengine2 PRIVATE
         crashpad::crashpad)
 
 target_precompile_headers(modengine2 PUBLIC
-        "$<$<COMPILE_LANGUAGE:CXX>:<MINT.h$<ANGLE-R>>"
         "$<$<COMPILE_LANGUAGE:CXX>:<sol/sol.hpp$<ANGLE-R>>"
         "$<$<COMPILE_LANGUAGE:CXX>:<fmt/format.h$<ANGLE-R>>"
         "$<$<COMPILE_LANGUAGE:CXX>:<spdlog/spdlog.h$<ANGLE-R>>"

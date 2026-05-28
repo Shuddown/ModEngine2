@@ -27,7 +27,16 @@ set_source_files_properties(
         COMPILE_FLAGS "-w"
 )
 
+add_library(modengine2_asm OBJECT
+        modengine/ext/debug_menu/ds3/_DS3BootMenu.asm
+        modengine/ext/debug_menu/ds3/_DS3Debug.asm
+        modengine/ext/debug_menu/ds3/_DS3DebugDash.asm
+        modengine/ext/debug_menu/ds3/_DS3GameProperties.asm
+        modengine/ext/profiling/profiler_trampoline.asm
+)
+
 add_library(modengine2 SHARED
+        $<TARGET_OBJECTS:modengine2_asm>
         main.cpp
         ${CMAKE_CURRENT_BINARY_DIR}/version.cpp
         modengine/crash_handler.cpp
@@ -44,15 +53,10 @@ add_library(modengine2 SHARED
         modengine/scripting/api_patch.cpp
         modengine/ext/base/base_extension.cpp
         modengine/ext/debug_menu/ds3/debug_menu_ds3.cpp
-        modengine/ext/debug_menu/ds3/_DS3BootMenu.asm
-        modengine/ext/debug_menu/ds3/_DS3Debug.asm
-        modengine/ext/debug_menu/ds3/_DS3DebugDash.asm
-        modengine/ext/debug_menu/ds3/_DS3GameProperties.asm
         modengine/ext/mod_loader/archive_file_overrides.cpp
         modengine/ext/mod_loader/mod_loader_extension.cpp
         modengine/ext/mod_loader/wwise_file_overrides.cpp
         modengine/ext/profiling/profiling_extension.cpp
-        modengine/ext/profiling/profiler_trampoline.asm
         modengine/ext/profiling/main_loop.cpp
         modengine/ext/profiling/thread_hooks.cpp
         modengine/ext/scylla/scyllahide_extension.cpp
@@ -62,7 +66,7 @@ add_library(modengine2 SHARED
         ${KIERO_SRC} modengine/logging.cpp modengine/logging.h modengine/settings_loader.cpp modengine/settings_loader.h modengine/logger.cpp)
 
 target_compile_features(modengine2 PUBLIC cxx_std_20)
-target_compile_options(modengine2 PUBLIC /utf-8)
+target_compile_options(modengine2 PUBLIC "$<$<COMPILE_LANGUAGE:CXX>:/utf-8>")
 target_compile_definitions(modengine2 PUBLIC FMT_HEADER_ONLY SPDLOG_WCHAR_TO_UTF8_SUPPORT)
 target_compile_definitions(modengine2 INTERFACE FMT_HEADER_ONLY MODENGINE_EXTERNAL)
 
@@ -89,7 +93,7 @@ target_include_directories(modengine2 PRIVATE
 target_link_libraries(modengine2 PRIVATE
         ${DETOURS_LIBRARY}
         spdlog::spdlog_header_only
-        sol2
+        sol2::sol2
         crashpad::crashpad)
 
 target_precompile_headers(modengine2 PUBLIC

@@ -9,7 +9,7 @@
 #include <exception>
 
 #include <windows.h>
-#include <MINT.h>
+//#include <MINT.h>
 
 namespace modengine {
 
@@ -50,7 +50,8 @@ public:
 
     MemoryScanner(HMODULE base)
     {
-        const auto image = RtlImageNtHeader(base);
+        const auto dos_header = reinterpret_cast<PIMAGE_DOS_HEADER>(base);
+        const auto image = reinterpret_cast<PIMAGE_NT_HEADERS>(reinterpret_cast<uintptr_t>(base) + dos_header->e_lfanew); 
         const auto start = reinterpret_cast<uintptr_t>(base);
         const auto end = start + image->OptionalHeader.SizeOfImage;
 
@@ -69,7 +70,7 @@ public:
     }
 
     MemoryScanner()
-        : MemoryScanner((HMODULE)NtCurrentPeb()->ImageBaseAddress)
+        : MemoryScanner(GetModuleHandleA(nullptr))
     {
     }
 
